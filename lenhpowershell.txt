@@ -1,0 +1,60 @@
+Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99 | ForEach-Object { Copy-Item $_.FullName "E:\cat_tia_sua_chua_video\New folder\concac" -Force }
+Remove-Item -Path (Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99).FullName
+________________________________________________________________________________________________________________________________________________________________________________________________________
+Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99 | ForEach-Object -Process { Copy-Item $_.FullName "E:\New folder (3)\ff" -Force }
+Remove-Item -Path (Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99).FullName
+
+_____________________________________________________________________________________________________________________________________________________________________
+Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99 | ForEach-Object { Copy-Item $_.FullName "E:\New folder (3)\ff" -Force }
+Remove-Item -Path (Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99).FullName
+
+
+_______________________________________________________________________________________________________________________________________________________________________
+Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99 | ForEach-Object { Copy-Item $_.FullName "E:\New folder (3)\New folder (2)" -Force }
+Remove-Item -Path (Get-ChildItem -File -Filter "*.ts" | Sort-Object LastWriteTime | Select-Object -First 99).FullName
+
+
+_____________________________________________________________________________________________________________________________________________________________________
+
+
+chuyển đổi mvk sang mp4 sử dụng codec h264 và giữ nguyên adudio và thay đổi Bitrate sao cho phù hợp với video gốc ở đây 
+codec hevc với Bitrate của video là 5690 kb/s  chuyển đổi sang codec h264 với Bitrate gốc mkv
+
+ffmpeg -i ff.mkv -c:v libx264 -b:v 5690k -c:a aac -strict -2 output.mp4
+
+
+_____________________________________________________________________________________________________________________________________________________________________
+
+
+chuyển đổi từ mkv sang mp4 giữ nguyên video và audio dùng trong trường hợp file mkv đã có codec h264 và audio aac không cần thay đổi một đơn vị riêng lẽ như video hay 
+audio
+
+ffmpeg -i video.mkv -codec copy output.mp4
+_____________________________________________________________________________________________________________________________________________________________________
+
+
+chuyển đổi từ mkv sang mp4 giữ nguyên video chuyển audio sang aac
+ffmpeg -i ff.mkv -c:v copy -c:a aac -strict experimental output.mp4
+_________________________________________________________________________________________________________________________________________________________________
+chuyển đổi từ mkv sang mp4 chuyển sang codec h264 chuyển audio sang aac 
+
+ffmpeg -i ff.mkv -c:v libx264 -c:a aac -strict experimental output.mp4
+
+_______________________________________________________________________________________________________________________________________________________________
+Convert video sang HLS giữ nguyên chất lượng
+Câu lệnh dưới đây sẽ giữ nguyên chất lượng video lẫn audio của video đó. Chỉ đơn thuần là convert sang định dạng HLS:
+input.mov là đường dẫn video input và input.m3u8 là đường dẫn output
+-hls_time 10 là thời gian mỗi segment video là 10s
+Câu lệnh trên sẽ tạo ra các file dạng input0.ts, input1.ts, input2.ts,... và một file input.m3u8 để chứa thông tin về các file ts đó.
+
+ffmpeg -i output.mp4 -codec: copy -start_number 0 -hls_time 10 -hls_list_size 0 -f hls outputt.m3u8
+
+
+________________________________________________________________________________________________________________________________________________________________
+
+nén video với bộ giãi mã h264 và giữ nguyên âm thanh số liệu -crf là số đầu vào ví dụ số 2 sẽ là từ 20mb lên 200000mb còn 24 là từ 74mb xuống 23mb còn medium là chất 
+lượng nén từ số 18 đến số 28 là nén còn từ 18 đến 1 là tăng lên 
+
+ffmpeg -i outputt21.ts -c:v libx264 -c:a copy -crf 24 -preset medium output.ts
+________________________________________________________________________________________________________________________________________________________________
+
